@@ -1,3 +1,6 @@
 <Solution>
   <Project Path="SmartLibrary.API/SmartLibrary.API.csproj" />
+  <Project Path="SmartLibrary.Application/SmartLibrary.Application.csproj" />
+  <Project Path="SmartLibrary.Domain/SmartLibrary.Domain.csproj" />
+  <Project Path="SmartLibrary.Infrastructure/SmartLibrary.Infrastructure.csproj" />
 </Solution>
