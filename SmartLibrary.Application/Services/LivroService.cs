@@ -124,6 +124,17 @@ public class LivroService(
         return await GetByIdAsync(id);
     }
 
+    public async Task DeleteAsync(int id)
+    {
+        var livro = await livroRepo.GetByIdAsync(id)
+            ?? throw new NotFoundException("Livro não encontrado.");
+
+        if (await livroRepo.HasEmprestimosAtivosAsync(id))
+            throw new BusinessException("Não é possível excluir o livro pois há empréstimos ativos para este título.");
+
+        await livroRepo.DeleteAsync(livro);
+    }
+
     private static LivroDto MapToDto(Livro livro) => new()
     {
         Id = livro.Id,

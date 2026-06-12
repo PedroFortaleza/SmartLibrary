@@ -61,6 +61,17 @@ public class ExemplarService(
         return MapToDto(exemplar);
     }
 
+    public async Task DeleteAsync(int id)
+    {
+        var exemplar = await exemplarRepo.GetByIdAsync(id)
+            ?? throw new NotFoundException("Exemplar não encontrado.");
+
+        if (exemplar.Estado == EstadoExemplar.Emprestado)
+            throw new BusinessException("Não é possível excluir um exemplar que está emprestado.");
+
+        await exemplarRepo.DeleteAsync(exemplar);
+    }
+
     private static ExemplarDto MapToDto(Exemplar e) => new()
     {
         Id = e.Id,

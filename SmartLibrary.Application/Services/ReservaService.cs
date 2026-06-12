@@ -83,6 +83,34 @@ public class ReservaService(
         await reservaRepo.UpdateAsync(reserva);
     }
 
+    public async Task NotificarAsync(int id)
+    {
+        var reserva = await reservaRepo.GetByIdAsync(id)
+            ?? throw new NotFoundException("Reserva não encontrada.");
+
+        if (reserva.Status != StatusReserva.Pendente)
+            throw new BusinessException("Apenas reservas com status Pendente podem ser notificadas.");
+
+        var horasExpiracao = await parametroRepo.GetIntAsync("HorasParaRetiradaReserva", 48);
+
+        reserva.Status = StatusReserva.Notificado;
+        reserva.NotificadoEm = DateTime.UtcNow;
+        reserva.DataExpiracao = DateTime.UtcNow.AddHours(horasExpiracao);
+        await reservaRepo.UpdateAsync(reserva);
+    }
+
+    public async Task ConfirmarRetiradaAsync(int id)
+    {
+        var reserva = await reservaRepo.GetByIdAsync(id)
+            ?? throw new NotFoundException("Reserva não encontrada.");
+
+        if (reserva.Status != StatusReserva.Notificado)
+            throw new BusinessException("Apenas reservas com status Notificado podem ter retirada confirmada.");
+
+        reserva.Status = StatusReserva.Retirado;
+        await reservaRepo.UpdateAsync(reserva);
+    }
+
     private static ReservaDto MapToDto(Reserva r) => new()
     {
         Id = r.Id,

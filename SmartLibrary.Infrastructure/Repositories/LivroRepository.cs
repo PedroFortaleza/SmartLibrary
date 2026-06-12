@@ -81,4 +81,9 @@ public class LivroRepository(SmartLibraryDbContext context) : BaseRepository<Liv
         => await Context.Exemplares
             .Where(e => e.LivroId == livroId && e.Ativo && e.Estado == EstadoExemplar.Disponivel)
             .ToListAsync();
+
+    public async Task<bool> HasEmprestimosAtivosAsync(int livroId)
+        => await Context.Emprestimos
+            .AnyAsync(e => e.Exemplar.LivroId == livroId &&
+                           e.Status != StatusEmprestimo.Devolvido);
 }

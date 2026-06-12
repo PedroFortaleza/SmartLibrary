@@ -53,4 +53,12 @@ public class LivrosController(ILivroService livroService) : ControllerBase
         var livro = await livroService.UpdateAsync(id, dto);
         return Ok(ApiResponse<LivroDto>.Success(livro, "Livro atualizado com sucesso."));
     }
+
+    [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Administrador")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await livroService.DeleteAsync(id);
+        return Ok(ApiResponse.Success("Livro excluído com sucesso."));
+    }
 }

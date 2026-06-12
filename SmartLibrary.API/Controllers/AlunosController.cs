@@ -31,6 +31,17 @@ public class AlunosController(
         return Ok(ApiResponse<AlunoPerfilDto>.Success(perfil, "Perfil atualizado com sucesso."));
     }
 
+    [HttpGet("buscar")]
+    [Authorize(Roles = "Bibliotecario,Administrador")]
+    public async Task<IActionResult> BuscarPorEmail([FromQuery] string email)
+    {
+        var aluno = await alunoService.BuscarPorEmailAsync(email);
+        if (aluno == null)
+            return NotFound(ApiResponse<AlunoPerfilDto>.Fail("Aluno não encontrado."));
+
+        return Ok(ApiResponse<AlunoPerfilDto>.Success(aluno));
+    }
+
     [HttpGet("{alunoId:int}/historico")]
     [Authorize(Roles = "Bibliotecario,Administrador")]
     public async Task<IActionResult> GetHistorico(int alunoId)

@@ -27,6 +27,14 @@ public class ExemplaresController(IExemplarService exemplarService) : Controller
             ApiResponse<ExemplarDto>.Success(exemplar, "Exemplar cadastrado com sucesso."));
     }
 
+    [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Bibliotecario,Administrador")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await exemplarService.DeleteAsync(id);
+        return Ok(ApiResponse.Success("Exemplar excluído com sucesso."));
+    }
+
     [HttpPut("{id:int}/estado")]
     [Authorize(Roles = "Bibliotecario,Administrador")]
     public async Task<IActionResult> UpdateEstado(int id, [FromBody] UpdateEstadoExemplarDto dto)

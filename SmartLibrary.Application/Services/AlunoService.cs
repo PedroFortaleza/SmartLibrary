@@ -60,6 +60,12 @@ public class AlunoService(
         return MapToDto(aluno);
     }
 
+    public async Task<AlunoPerfilDto?> BuscarPorEmailAsync(string email)
+    {
+        var aluno = await usuarioRepo.GetAlunoByEmailAsync(email);
+        return aluno == null ? null : MapToDto(aluno);
+    }
+
     private static AlunoPerfilDto MapToDto(Domain.Entities.Aluno a) => new()
     {
         Id = a.Id,

@@ -12,4 +12,5 @@ public interface ILivroService
     Task<List<ExemplarDto>> GetDisponibilidadeAsync(int id);
     Task<LivroDto> CreateAsync(CreateLivroDto dto);
     Task<LivroDto> UpdateAsync(int id, UpdateLivroDto dto);
+    Task DeleteAsync(int id);
 }

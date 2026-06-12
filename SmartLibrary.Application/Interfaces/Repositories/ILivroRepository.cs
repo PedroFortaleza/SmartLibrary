@@ -10,4 +10,5 @@ public interface ILivroRepository : IBaseRepository<Livro>
     Task<Livro?> GetByIsbnAsync(string isbn);
     Task<Livro?> GetWithDetailsAsync(int id);
     Task<List<Exemplar>> GetExemplaresDisponiveisAsync(int livroId);
+    Task<bool> HasEmprestimosAtivosAsync(int livroId);
 }

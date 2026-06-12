@@ -34,6 +34,22 @@ public class ReservasController(IReservaService reservaService) : ControllerBase
         return Ok(ApiResponse.Success("Reserva cancelada com sucesso."));
     }
 
+    [HttpPut("{id:int}/notificar")]
+    [Authorize(Roles = "Bibliotecario,Administrador")]
+    public async Task<IActionResult> Notificar(int id)
+    {
+        await reservaService.NotificarAsync(id);
+        return Ok(ApiResponse.Success("Aluno notificado com sucesso."));
+    }
+
+    [HttpPut("{id:int}/retirar")]
+    [Authorize(Roles = "Bibliotecario,Administrador")]
+    public async Task<IActionResult> ConfirmarRetirada(int id)
+    {
+        await reservaService.ConfirmarRetiradaAsync(id);
+        return Ok(ApiResponse.Success("Retirada confirmada com sucesso."));
+    }
+
     private int GetUsuarioId() => int.Parse(User.FindFirst("uid")?.Value ?? "0");
     private string GetRole() => User.FindFirst(ClaimTypes.Role)?.Value ?? "";
 }

@@ -19,4 +19,9 @@ public class UsuarioRepository(SmartLibraryDbContext context) : BaseRepository<U
         => await Context.Alunos
             .Include(a => a.Usuario)
             .FirstOrDefaultAsync(a => a.Id == alunoId);
+
+    public async Task<Aluno?> GetAlunoByEmailAsync(string email)
+        => await Context.Alunos
+            .Include(a => a.Usuario)
+            .FirstOrDefaultAsync(a => a.Usuario.Email == email && a.Usuario.Ativo);
 }
